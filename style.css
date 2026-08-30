@@ -27,226 +27,225 @@ body {
     overflow-x: hidden;
 }
 
-/* 1. OBÁLKA – pozvánka je skutečně schovaná uvnitř */
-.envelope-overlay {
+/* 1. ÚVODNÍ POZVÁNKA */
+.invitation-overlay {
     position: fixed;
     inset: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(circle at 50% 42%, #ffffff 0%, var(--color-beige-bg) 60%, #e1d5c1 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 28px;
     overflow: hidden;
-    transition: opacity .8s ease, visibility .8s ease;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,.98) 0%, rgba(248,242,232,.98) 52%, rgba(238,229,214,.98) 100%);
+    transition: opacity .85s cubic-bezier(.22,.61,.36,1), visibility .85s ease;
 }
 
-.envelope-overlay::before,
-.envelope-overlay::after {
+.invitation-overlay::before,
+.invitation-overlay::after {
     content: '';
     position: absolute;
-    border: 1px solid rgba(191,161,95,.16);
+    border: 1px solid rgba(191,161,95,.22);
     border-radius: 50%;
     pointer-events: none;
 }
 
-.envelope-overlay::before {
-    width: 72vw;
-    height: 72vw;
-    max-width: 920px;
-    max-height: 920px;
+.invitation-overlay::before {
+    width: 70vw;
+    height: 70vw;
+    max-width: 900px;
+    max-height: 900px;
 }
 
-.envelope-overlay::after {
-    width: 88vw;
-    height: 88vw;
-    max-width: 1120px;
-    max-height: 1120px;
+.invitation-overlay::after {
+    width: 92vw;
+    height: 92vw;
+    max-width: 1200px;
+    max-height: 1200px;
 }
 
-.envelope-overlay.opened {
+.invitation-overlay.opening {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
 
-.envelope-wrapper {
+.invitation-card {
     position: relative;
     z-index: 2;
-    width: min(72vw, 920px);
-    text-align: center;
-    perspective: 1400px;
+    width: min(620px, 82vw);
+    min-height: min(720px, 76vh);
+    padding: 12px;
+    border: 1px solid var(--color-gold);
+    border-radius: 3px;
+    background: linear-gradient(145deg, #1b4938, #103326);
+    box-shadow: 0 30px 80px rgba(17,52,38,.24), 0 8px 24px rgba(0,0,0,.12);
+    cursor: pointer;
+    color: inherit;
+    transform: translateY(0) scale(1);
+    transition: transform .55s cubic-bezier(.22,.61,.36,1), box-shadow .55s ease;
+    animation: invitationAppear .9s ease both;
 }
 
-.envelope {
+.invitation-card:hover {
+    transform: translateY(-8px) scale(1.012);
+    box-shadow: 0 38px 90px rgba(17,52,38,.30), 0 12px 28px rgba(0,0,0,.14);
+}
+
+.invitation-card:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 6px;
+}
+
+.invitation-inner {
     position: relative;
-    width: 100%;
-    aspect-ratio: 1.58 / 1;
-    background: #1a4736;
-    border: 3px solid var(--color-gold);
-    border-radius: 10px;
-    box-shadow: 0 30px 70px rgba(0,0,0,.36), 0 8px 20px rgba(0,0,0,.2);
-    isolation: isolate;
-    overflow: visible;
-}
-
-/*
-   DŮLEŽITÉ POŘADÍ VRSTEV:
-   1 = dopis schovaný uvnitř
-   3 = kapsa
-   4 = klopa
-   6 = vysunutý dopis
-   7 = pečeť
-   Díky tomu zlatý okraj není samostatná vrstva a nikdy neleží přes pozvánku.
-*/
-.envelope .letter {
-    position: absolute;
-    z-index: 1;
-    left: 7%;
-    right: 7%;
-    bottom: 5%;
-    height: 80%;
-    background: #fcf9f5;
-    border-radius: 5px;
-    box-shadow: 0 12px 30px rgba(0,0,0,.22);
+    min-height: calc(min(720px, 76vh) - 24px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    cursor: pointer;
-    transform: translateY(0);
-    transition: transform .75s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
-}
-
-.envelope .flap {
-    position: absolute;
-    inset: 0;
-    z-index: 4;
-    background: linear-gradient(145deg, #23523f 0%, #14382b 100%);
-    clip-path: polygon(0 0, 100% 0, 50% 58%);
-    transform-origin: top center;
-    transform: rotateX(0deg);
-    transition: transform .75s cubic-bezier(.22,.61,.36,1);
-    pointer-events: none;
-}
-
-.envelope .pocket {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    background: linear-gradient(145deg, #1e4b39 0%, #123528 100%);
-    clip-path: polygon(0 43%, 50% 55%, 100% 43%, 100% 100%, 0 100%);
-    pointer-events: none;
-}
-
-/* Hover = obálka se otevře a pozvánka vyjede ven. */
-.envelope-wrapper:hover .flap,
-.envelope-wrapper.is-hovered .flap {
-    transform: rotateX(180deg);
-    z-index: 2;
-}
-
-.envelope-wrapper:hover .letter,
-.envelope-wrapper.is-hovered .letter {
-    transform: translateY(-63%);
-    z-index: 6;
-    box-shadow: 0 20px 40px rgba(0,0,0,.25);
-}
-
-.envelope-seal {
-    position: absolute;
-    z-index: 7;
-    left: 50%;
-    top: 53%;
-    transform: translate(-50%, -50%);
-    width: clamp(58px, 6vw, 76px);
-    height: clamp(58px, 6vw, 76px);
-    border-radius: 50%;
-    background: linear-gradient(145deg, #d1b46d, #a88643);
-    border: 2px solid #ead59b;
-    box-shadow: 0 5px 15px rgba(0,0,0,.3);
-    display: flex;
     align-items: center;
     justify-content: center;
+    padding: 60px 40px;
+    overflow: hidden;
+    background: #fcf9f5;
+    border: 1px solid rgba(191,161,95,.65);
+}
+
+.invitation-inner::before,
+.invitation-inner::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 260px;
+    border: 1px solid rgba(191,161,95,.42);
+    border-radius: 70% 30% 70% 30%;
     pointer-events: none;
-    transition: opacity .3s ease, transform .45s ease;
 }
 
-.envelope-wrapper:hover .envelope-seal,
-.envelope-wrapper.is-hovered .envelope-seal {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.75);
+.invitation-inner::before {
+    left: -92px;
+    bottom: -90px;
+    transform: rotate(28deg);
 }
 
-.envelope-seal span {
-    color: #fffaf0;
+.invitation-inner::after {
+    right: -92px;
+    top: -90px;
+    transform: rotate(208deg);
+}
+
+.invitation-small {
+    font-family: var(--font-body);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--color-gold);
+}
+
+.invitation-rule {
+    width: 64px;
+    height: 1px;
+    margin: 24px 0 34px;
+    background: var(--color-gold);
+}
+
+.invitation-names {
     font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 2.2vw, 2rem);
-    line-height: 1;
-}
-
-.letter-names {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 4vw, 3.5rem);
-    line-height: 1.1;
+    font-size: clamp(3.2rem, 6vw, 5.2rem);
+    line-height: .98;
     color: var(--color-dark-green);
     font-weight: 600;
 }
 
-.letter-date {
-    margin-top: 14px;
-    font-size: clamp(.8rem, 1.2vw, 1.05rem);
-    letter-spacing: 3px;
+.invitation-names em {
+    display: block;
+    margin: 14px 0;
+    font-size: .48em;
+    font-weight: 400;
     color: var(--color-gold);
 }
 
-.click-hint {
-    margin-top: 24px;
-    color: #e3ca8d;
-    font-family: var(--font-heading);
-    font-style: italic;
-    font-size: 1.2rem;
-    letter-spacing: .5px;
-    transition: opacity .3s ease;
+.invitation-date {
+    margin-top: 42px;
+    font-family: var(--font-body);
+    font-size: .9rem;
+    letter-spacing: 4px;
+    color: var(--color-dark-green);
 }
 
-.envelope-wrapper:hover .click-hint {
-    opacity: .9;
+.invitation-place {
+    margin-top: 12px;
+    font-family: var(--font-body);
+    font-size: .68rem;
+    letter-spacing: 3px;
+    color: var(--color-text-muted);
+}
+
+.invitation-open-hint {
+    margin-top: 64px;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--color-dark-green);
+    transition: color .25s ease, transform .25s ease;
+}
+
+.invitation-card:hover .invitation-open-hint {
+    color: var(--color-gold);
+    transform: translateY(-2px);
+}
+
+.invitation-ornament {
+    position: absolute;
+    z-index: 3;
+    width: 80px;
+    height: 120px;
+    border: 1px solid rgba(191,161,95,.38);
+    border-radius: 80% 20% 80% 20%;
+    pointer-events: none;
+}
+
+.ornament-left {
+    left: 18px;
+    bottom: 18px;
+    transform: rotate(-28deg);
+}
+
+.ornament-right {
+    right: 18px;
+    top: 18px;
+    transform: rotate(152deg);
+}
+
+@keyframes invitationAppear {
+    from { opacity: 0; transform: translateY(22px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.main-content {
+    opacity: 0;
+    transform: scale(1.025);
+    transform-origin: top center;
+    transition: opacity .9s ease .15s, transform 1s cubic-bezier(.22,.61,.36,1) .05s;
+}
+
+.main-content.is-visible {
+    opacity: 1;
+    transform: scale(1);
 }
 
 @media (max-width: 768px) {
-    .envelope-wrapper {
-        width: min(90vw, 620px);
+    .invitation-overlay { padding: 18px; }
+    .invitation-card {
+        width: min(92vw, 500px);
+        min-height: min(640px, 78vh);
     }
-
-    .envelope {
-        border-width: 2px;
+    .invitation-inner {
+        min-height: calc(min(640px, 78vh) - 24px);
+        padding: 45px 22px;
     }
-
-    .envelope .letter {
-        padding: 18px;
-    }
-
-    .letter-names {
-        font-size: clamp(1.5rem, 7vw, 2.5rem);
-    }
-
-    .letter-date {
-        font-size: .7rem;
-        letter-spacing: 2px;
-    }
-
-    .envelope-wrapper:hover .letter,
-    .envelope-wrapper.is-hovered .letter {
-        transform: translateY(-50%);
-    }
-
-    .click-hint {
-        font-size: 1rem;
-        padding: 0 15px;
-    }
+    .invitation-names { font-size: clamp(2.7rem, 12vw, 4rem); }
+    .invitation-date { letter-spacing: 2.5px; }
+    .invitation-open-hint { margin-top: 48px; }
 }
 
 /* CONTAINER & GENERAL SECTIONS */
@@ -871,19 +870,3 @@ input:focus, select:focus, textarea:focus {
 
 /* Silnější typografická hierarchie pro dresscode */
 .dresscode-card strong { color: var(--color-dark-green); font-weight: 600; }
-
-@media (max-width: 768px) {
-    .envelope-wrapper { width: calc(100vw - 24px); padding: 12px; }
-    .envelope { height: 52vw; min-height: 210px; max-height: 340px; border-width: 2px; }
-    .envelope .letter { height: 78%; left: 5%; right: 5%; }
-    .letter-names { font-size: 1.8rem; }
-    .letter-date { font-size: .75rem; letter-spacing: 2px; }
-    .heart-seal { width: 44px; height: 44px; left: calc(50% - 22px); }
-}
-
-@media (max-width: 480px) {
-    .envelope { height: 58vw; min-height: 190px; }
-    .envelope-wrapper { margin-bottom: -10px; }
-    .envelope-wrapper:hover .letter,
-    .envelope-wrapper.is-open .letter { transform: translateY(-35%); }
-}

@@ -12,27 +12,20 @@
 </head>
 <body>
 
-    <!-- 1. OBÁLKA -->
-    <div id="envelope-overlay" class="envelope-overlay">
-        <div class="envelope-wrapper" role="group" aria-label="Svatební obálka s pozvánkou">
-            <div class="envelope">
-                <!-- Pozvánka je schovaná uvnitř a při najetí vyjede ven. -->
-                <div class="letter" onclick="openEnvelope(event)" role="button" tabindex="0" aria-label="Otevřít svatební pozvánku">
-                    <div class="letter-names">Štěpánka &amp; Tomáš</div>
-                    <div class="letter-date">8. KVĚTNA 2027</div>
-                </div>
-
-                <!-- Klopa obálky se při najetí otevře dozadu. -->
-                <div class="flap"></div>
-                <!-- Přední kapsa obálky. -->
-                <div class="pocket"></div>
-
-                <div class="envelope-seal" aria-hidden="true">
-                    <span>♡</span>
-                </div>
-            </div>
-            <p class="click-hint">Najetím odhalíte pozvánku · kliknutím ji otevřete</p>
-        </div>
+    <!-- 1. ÚVODNÍ POZVÁNKA -->
+    <div id="invitation-overlay" class="invitation-overlay">
+        <button class="invitation-card" type="button" onclick="openInvitation()" aria-label="Otevřít svatební pozvánku">
+            <span class="invitation-ornament ornament-left" aria-hidden="true"></span>
+            <span class="invitation-inner">
+                <span class="invitation-small">SVATEBNÍ POZVÁNKA</span>
+                <span class="invitation-rule" aria-hidden="true"></span>
+                <span class="invitation-names">Štěpánka <em>&amp;</em> Tomáš</span>
+                <span class="invitation-date">8. KVĚTNA 2027</span>
+                <span class="invitation-place">MLÝN 1774 · DZBEL</span>
+                <span class="invitation-open-hint">Klikněte pro otevření</span>
+            </span>
+            <span class="invitation-ornament ornament-right" aria-hidden="true"></span>
+        </button>
     </div>
 
     <!-- MAIN CONTENT -->

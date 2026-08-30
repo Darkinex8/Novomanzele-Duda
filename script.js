@@ -1,39 +1,25 @@
-// Otevření obálky – spustí se pouze kliknutím na vysunutou pozvánku.
-function openEnvelope(event) {
-    if (event) event.stopPropagation();
+// Otevření svatební pozvánky s jemným přechodem na hlavní stránku.
+function openInvitation() {
+    const overlay = document.getElementById('invitation-overlay');
+    const main = document.querySelector('.main-content');
 
-    const letter = document.querySelector('.envelope .letter');
-    const overlay = document.getElementById('envelope-overlay');
+    if (!overlay) return;
 
-    if (!letter || !overlay) return;
+    overlay.classList.add('opening');
+    if (main) main.classList.add('is-visible');
 
-    letter.classList.add('is-opening');
-
-    // Necháme pozvánku krátce dojet a pak zmizí celá obálka.
+    // Overlay z DOM odstraníme až po dokončení animace.
     setTimeout(() => {
-        overlay.classList.add('opened');
-    }, 650);
+        overlay.remove();
+    }, 1000);
 }
 
-// Na dotykových zařízeních není hover. První klepnutí pozvánku vysune,
-// druhé klepnutí přímo na pozvánku ji otevře.
 document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.querySelector('.envelope-wrapper');
-    const letter = document.querySelector('.envelope .letter');
-
-    if (!wrapper || !letter) return;
-
-    wrapper.addEventListener('click', (event) => {
-        if (event.target.closest('.letter')) return;
-        wrapper.classList.add('is-hovered');
-    });
-
-    letter.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openEnvelope(event);
-        }
-    });
+    const main = document.querySelector('.main-content');
+    if (main) {
+        // Hlavní obsah se zobrazí až po otevření pozvánky.
+        main.classList.remove('is-visible');
+    }
 });
 
 // Odpočet do 8. května 2027 11:00
