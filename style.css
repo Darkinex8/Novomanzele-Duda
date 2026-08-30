@@ -66,6 +66,17 @@ body {
     border: 2px solid var(--color-gold);
 }
 
+/* Zlatý rámeček je samostatná vrstva, takže zůstane viditelný po celém obvodu i přes klopu a kapsu. */
+.envelope::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--color-gold);
+    border-radius: 6px;
+    z-index: 6;
+    pointer-events: none;
+}
+
 .envelope .flap {
     position: absolute;
     top: 0;
@@ -554,7 +565,7 @@ body {
 
 .guest-row-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1.05fr 2fr 1.25fr 1.05fr;
     gap: 10px;
     background: var(--color-beige-bg);
     padding: 15px;
@@ -568,6 +579,8 @@ body {
     color: var(--color-dark-green);
     margin-bottom: 4px;
     font-weight: 600;
+    min-height: 2.2em;
+    line-height: 1.25;
 }
 
 input, select, textarea {
@@ -620,6 +633,16 @@ input:focus, select:focus, textarea:focus {
 .form-status {
     text-align: center;
     margin-top: 15px;
+}
+
+.children-note-section {
+    background: var(--color-beige-bg);
+    padding: 0 0 10px;
+}
+
+.children-note-section .age-restriction-card {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .age-restriction-card {
