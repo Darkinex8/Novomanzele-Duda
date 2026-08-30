@@ -34,12 +34,23 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--color-dark-green);
+    background:
+        radial-gradient(circle at 50% 42%, rgba(255,255,255,.96) 0%, rgba(248,242,232,.98) 48%, rgba(229,220,204,.98) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
     transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.envelope-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 18% 22%, rgba(191,161,95,.10) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 74%, rgba(17,52,38,.07) 0 2px, transparent 3px);
+    pointer-events: none;
 }
 
 .envelope-overlay.opened {
@@ -49,70 +60,70 @@ body {
 }
 
 .envelope-wrapper {
+    position: relative;
     text-align: center;
     cursor: pointer;
-    perspective: 1000px;
+    perspective: 1200px;
     padding: 20px;
+    width: min(74vw, 960px);
 }
 
 .envelope {
     position: relative;
-    width: 370px;
-    height: 240px;
+    width: 100%;
+    height: clamp(340px, 42vw, 560px);
     background: #194231;
-    border-radius: 6px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    margin: 0 auto 20px auto;
-    border: 2px solid var(--color-gold);
+    border-radius: 10px;
+    box-shadow: 0 24px 55px rgba(31,49,41,.28), 0 5px 15px rgba(0,0,0,.12);
+    margin: 0 auto 28px auto;
+    border: 3px solid var(--color-gold);
+    overflow: visible;
 }
 
-/* Zlatý rámeček je samostatná vrstva, takže zůstane viditelný po celém obvodu i přes klopu a kapsu. */
+/* Rámeček je součástí samotné obálky. Je pod dopisem, takže se při jeho vysunutí
+   zlatá linka nikdy nepřekreslí přes bílý papír. */
 .envelope::after {
     content: '';
     position: absolute;
-    inset: 0;
-    border: 2px solid var(--color-gold);
-    border-radius: 6px;
-    z-index: 6;
+    inset: 7px;
+    border: 1px solid rgba(224,196,126,.75);
+    border-radius: 5px;
+    z-index: 1;
     pointer-events: none;
 }
 
 .envelope .flap {
     position: absolute;
-    top: 0;
-    left: 0;
-    border-left: 185px solid transparent;
-    border-right: 185px solid transparent;
-    border-top: 135px solid #133829;
+    inset: 0;
+    background: #133829;
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
     transform-origin: top;
     transition: transform 0.6s ease-in-out, z-index 0.6s;
     z-index: 4;
+    border-radius: 7px 7px 0 0;
 }
 
 .envelope .pocket {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    border-left: 185px solid #1c4837;
-    border-right: 185px solid #1c4837;
-    border-bottom: 120px solid #15392b;
-    border-top: 100px solid transparent;
+    inset: 0;
+    background: #15392b;
+    clip-path: polygon(0 42%, 50% 100%, 100% 42%, 100% 100%, 0 100%);
     z-index: 3;
-    border-radius: 0 0 6px 6px;
+    border-radius: 0 0 7px 7px;
 }
 
 .envelope .letter {
     position: absolute;
-    bottom: 10px;
-    left: 20px;
-    right: 20px;
-    height: 180px;
+    bottom: 12px;
+    left: 6%;
+    right: 6%;
+    height: 78%;
     background: #fcf9f5;
-    border-radius: 6px;
-    padding: 20px 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border-radius: 7px;
+    padding: 30px 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.16);
     transition: transform 0.6s ease-in-out;
-    z-index: 2;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -121,53 +132,54 @@ body {
 
 .letter-names {
     font-family: var(--font-heading);
-    font-size: 1.8rem;
+    font-size: clamp(2rem, 3vw, 3rem);
     color: var(--color-dark-green);
     font-weight: 600;
 }
 
 .letter-date {
-    font-size: 0.85rem;
-    letter-spacing: 2px;
+    font-size: clamp(.9rem, 1.2vw, 1.1rem);
+    letter-spacing: 3px;
     color: var(--color-gold);
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 .heart-seal {
     position: absolute;
-    top: 105px;
-    left: calc(50% - 20px);
-    width: 40px;
-    height: 40px;
+    top: 48%;
+    left: calc(50% - 28px);
+    width: 56px;
+    height: 56px;
     background: var(--color-gold);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: white;
-    z-index: 5;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 6;
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
     transition: opacity 0.4s ease;
 }
 
 .click-hint {
-    color: var(--color-gold);
+    color: var(--color-dark-green);
     font-family: var(--font-heading);
     font-style: italic;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     letter-spacing: 1px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.7);
 }
 
 .envelope-wrapper:hover .flap,
 .envelope-wrapper.is-open .flap {
     transform: rotateX(180deg);
-    z-index: 1;
+    z-index: 2;
 }
 
 .envelope-wrapper:hover .letter,
 .envelope-wrapper.is-open .letter {
-    transform: translateY(-120px);
+    transform: translateY(-42%);
 }
 
 .envelope-wrapper.is-open .heart-seal {
@@ -797,7 +809,18 @@ input:focus, select:focus, textarea:focus {
 /* Silnější typografická hierarchie pro dresscode */
 .dresscode-card strong { color: var(--color-dark-green); font-weight: 600; }
 
+@media (max-width: 768px) {
+    .envelope-wrapper { width: calc(100vw - 24px); padding: 12px; }
+    .envelope { height: 52vw; min-height: 210px; max-height: 340px; border-width: 2px; }
+    .envelope .letter { height: 78%; left: 5%; right: 5%; }
+    .letter-names { font-size: 1.8rem; }
+    .letter-date { font-size: .75rem; letter-spacing: 2px; }
+    .heart-seal { width: 44px; height: 44px; left: calc(50% - 22px); }
+}
+
 @media (max-width: 480px) {
-    .envelope { transform: scale(.86); transform-origin: center; }
-    .envelope-wrapper { margin-bottom: -20px; }
+    .envelope { height: 58vw; min-height: 190px; }
+    .envelope-wrapper { margin-bottom: -10px; }
+    .envelope-wrapper:hover .letter,
+    .envelope-wrapper.is-open .letter { transform: translateY(-35%); }
 }
