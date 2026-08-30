@@ -12,21 +12,26 @@
 </head>
 <body>
 
-    <!-- 1. NOVÁ OBÁLKA (Úvodní animace) -->
+    <!-- 1. OBÁLKA -->
     <div id="envelope-overlay" class="envelope-overlay">
-        <div class="envelope-wrapper" onclick="openEnvelope()" role="button" aria-label="Otevřít svatební pozvánku">
+        <div class="envelope-wrapper" role="group" aria-label="Svatební obálka s pozvánkou">
             <div class="envelope">
-                <div class="letter">
+                <!-- Pozvánka je schovaná uvnitř a při najetí vyjede ven. -->
+                <div class="letter" onclick="openEnvelope(event)" role="button" tabindex="0" aria-label="Otevřít svatební pozvánku">
                     <div class="letter-names">Štěpánka &amp; Tomáš</div>
                     <div class="letter-date">8. KVĚTNA 2027</div>
                 </div>
+
+                <!-- Klopa obálky se při najetí otevře dozadu. -->
                 <div class="flap"></div>
+                <!-- Přední kapsa obálky. -->
                 <div class="pocket"></div>
-                <div class="envelope-seal">
+
+                <div class="envelope-seal" aria-hidden="true">
                     <span>♡</span>
                 </div>
             </div>
-            <p class="click-hint">Klikněte pro otevření</p>
+            <p class="click-hint">Najetím odhalíte pozvánku · kliknutím ji otevřete</p>
         </div>
     </div>
 

@@ -1,19 +1,40 @@
-// Otevření obálky s plynulou animací
-function openEnvelope() {
-    const wrapper = document.querySelector('.envelope-wrapper');
-    const overlay = document.getElementById('envelope-overlay');
-    
-    if (wrapper) {
-        wrapper.classList.add('is-open');
-    }
+// Otevření obálky – spustí se pouze kliknutím na vysunutou pozvánku.
+function openEnvelope(event) {
+    if (event) event.stopPropagation();
 
-    // Počká 0.8s na dokončení rozevření obálky a skryje překrytí
+    const letter = document.querySelector('.envelope .letter');
+    const overlay = document.getElementById('envelope-overlay');
+
+    if (!letter || !overlay) return;
+
+    letter.classList.add('is-opening');
+
+    // Necháme pozvánku krátce dojet a pak zmizí celá obálka.
     setTimeout(() => {
-        if (overlay) {
-            overlay.classList.add('opened');
-        }
-    }, 800);
+        overlay.classList.add('opened');
+    }, 650);
 }
+
+// Na dotykových zařízeních není hover. První klepnutí pozvánku vysune,
+// druhé klepnutí přímo na pozvánku ji otevře.
+document.addEventListener('DOMContentLoaded', () => {
+    const wrapper = document.querySelector('.envelope-wrapper');
+    const letter = document.querySelector('.envelope .letter');
+
+    if (!wrapper || !letter) return;
+
+    wrapper.addEventListener('click', (event) => {
+        if (event.target.closest('.letter')) return;
+        wrapper.classList.add('is-hovered');
+    });
+
+    letter.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openEnvelope(event);
+        }
+    });
+});
 
 // Odpočet do 8. května 2027 11:00
 const targetDate = new Date("May 8, 2027 11:00:00").getTime();

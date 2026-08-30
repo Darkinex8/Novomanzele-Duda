@@ -27,14 +27,14 @@ body {
     overflow-x: hidden;
 }
 
-/* 1. NOVÁ OBÁLKA – samostatně postavená od nuly */
+/* 1. OBÁLKA – pozvánka je skutečně schovaná uvnitř */
 .envelope-overlay {
     position: fixed;
     inset: 0;
     width: 100vw;
     height: 100vh;
     background:
-        radial-gradient(circle at 50% 45%, #284f40 0%, #173a2d 48%, #0d291f 100%);
+        radial-gradient(circle at 50% 42%, #315b4b 0%, #173d2f 52%, #0c281e 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,28 +43,27 @@ body {
     transition: opacity .8s ease, visibility .8s ease;
 }
 
-/* Jemný dekorativní podklad, aby zelená obálka nezanikala. */
 .envelope-overlay::before,
 .envelope-overlay::after {
     content: '';
     position: absolute;
-    border: 1px solid rgba(191,161,95,.18);
+    border: 1px solid rgba(191,161,95,.16);
     border-radius: 50%;
     pointer-events: none;
 }
 
 .envelope-overlay::before {
-    width: 70vw;
-    height: 70vw;
-    max-width: 900px;
-    max-height: 900px;
+    width: 72vw;
+    height: 72vw;
+    max-width: 920px;
+    max-height: 920px;
 }
 
 .envelope-overlay::after {
-    width: 82vw;
-    height: 82vw;
-    max-width: 1080px;
-    max-height: 1080px;
+    width: 88vw;
+    height: 88vw;
+    max-width: 1120px;
+    max-height: 1120px;
 }
 
 .envelope-overlay.opened {
@@ -77,7 +76,6 @@ body {
     position: relative;
     z-index: 2;
     width: min(72vw, 920px);
-    cursor: pointer;
     text-align: center;
     perspective: 1400px;
 }
@@ -86,55 +84,78 @@ body {
     position: relative;
     width: 100%;
     aspect-ratio: 1.58 / 1;
-    background: #1b4736;
+    background: #1a4736;
     border: 3px solid var(--color-gold);
     border-radius: 10px;
     box-shadow: 0 30px 70px rgba(0,0,0,.36), 0 8px 20px rgba(0,0,0,.2);
     isolation: isolate;
+    overflow: visible;
 }
 
-/* Zlatý proužek je pouze skutečný vnější okraj obálky.
-   Uvnitř obálky není žádná vrstva, která by mohla při vysunutí
-   dopisu překrýt jeho bílou plochu. */
-
-/* Zadní část obálky. */
+/*
+   DŮLEŽITÉ POŘADÍ VRSTEV:
+   1 = dopis schovaný uvnitř
+   3 = kapsa
+   4 = klopa
+   6 = vysunutý dopis
+   7 = pečeť
+   Díky tomu zlatý okraj není samostatná vrstva a nikdy neleží přes pozvánku.
+*/
 .envelope .letter {
     position: absolute;
     z-index: 1;
     left: 7%;
     right: 7%;
-    bottom: 7%;
-    height: 82%;
+    bottom: 6%;
+    height: 86%;
     background: #fcf9f5;
     border-radius: 5px;
-    box-shadow: 0 10px 28px rgba(0,0,0,.2);
+    box-shadow: 0 12px 30px rgba(0,0,0,.22);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 30px;
-    transition: transform .7s cubic-bezier(.22,.61,.36,1);
+    cursor: pointer;
+    transform: translateY(0);
+    transition: transform .75s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
 }
 
 .envelope .flap {
     position: absolute;
     inset: 0;
     z-index: 4;
-    background: linear-gradient(145deg, #214e3d 0%, #153a2c 100%);
+    background: linear-gradient(145deg, #23523f 0%, #14382b 100%);
     clip-path: polygon(0 0, 100% 0, 50% 58%);
     transform-origin: top center;
-    transition: transform .7s cubic-bezier(.22,.61,.36,1);
+    transform: rotateX(0deg);
+    transition: transform .75s cubic-bezier(.22,.61,.36,1);
+    pointer-events: none;
 }
 
 .envelope .pocket {
     position: absolute;
     inset: 0;
     z-index: 3;
-    background: linear-gradient(145deg, #1e4a38 0%, #123528 100%);
+    background: linear-gradient(145deg, #1e4b39 0%, #123528 100%);
     clip-path: polygon(0 43%, 50% 100%, 100% 43%, 100% 100%, 0 100%);
+    pointer-events: none;
 }
 
-/* Pečeť je součástí obálky a při otevření zmizí. */
+/* Hover = obálka se otevře a pozvánka vyjede ven. */
+.envelope-wrapper:hover .flap,
+.envelope-wrapper.is-hovered .flap {
+    transform: rotateX(180deg);
+    z-index: 2;
+}
+
+.envelope-wrapper:hover .letter,
+.envelope-wrapper.is-hovered .letter {
+    transform: translateY(-63%);
+    z-index: 6;
+    box-shadow: 0 20px 40px rgba(0,0,0,.25);
+}
+
 .envelope-seal {
     position: absolute;
     z-index: 7;
@@ -150,7 +171,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity .35s ease, transform .45s ease;
+    pointer-events: none;
+    transition: opacity .3s ease, transform .45s ease;
+}
+
+.envelope-wrapper:hover .envelope-seal,
+.envelope-wrapper.is-hovered .envelope-seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.75);
 }
 
 .envelope-seal span {
@@ -180,25 +208,13 @@ body {
     color: #e3ca8d;
     font-family: var(--font-heading);
     font-style: italic;
-    font-size: 1.35rem;
-    letter-spacing: 1px;
+    font-size: 1.2rem;
+    letter-spacing: .5px;
+    transition: opacity .3s ease;
 }
 
-/* Dopis se vysune ven z obálky. Zlatý okraj zůstává na obálce pod ním. */
-.envelope-wrapper.is-open .flap {
-    transform: rotateX(180deg);
-    z-index: 2;
-}
-
-.envelope-wrapper.is-open .letter {
-    transform: translateY(-58%);
-    z-index: 5;
-}
-
-.envelope-wrapper.is-open .envelope-seal {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(.75);
-    pointer-events: none;
+.envelope-wrapper:hover .click-hint {
+    opacity: .9;
 }
 
 @media (max-width: 768px) {
@@ -209,7 +225,6 @@ body {
     .envelope {
         border-width: 2px;
     }
-
 
     .envelope .letter {
         padding: 18px;
@@ -224,8 +239,14 @@ body {
         letter-spacing: 2px;
     }
 
-    .envelope-wrapper.is-open .letter {
+    .envelope-wrapper:hover .letter,
+    .envelope-wrapper.is-hovered .letter {
         transform: translateY(-50%);
+    }
+
+    .click-hint {
+        font-size: 1rem;
+        padding: 0 15px;
     }
 }
 
