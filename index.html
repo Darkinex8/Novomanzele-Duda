@@ -12,17 +12,19 @@
 </head>
 <body>
 
-    <!-- 1. OBÁLKA (Úvodní animace) -->
+    <!-- 1. NOVÁ OBÁLKA (Úvodní animace) -->
     <div id="envelope-overlay" class="envelope-overlay">
-        <div class="envelope-wrapper" onclick="openEnvelope()">
+        <div class="envelope-wrapper" onclick="openEnvelope()" role="button" aria-label="Otevřít svatební pozvánku">
             <div class="envelope">
-                <div class="flap"></div>
-                <div class="pocket"></div>
                 <div class="letter">
-                    <div class="letter-names">Štěpánka & Tomáš</div>
+                    <div class="letter-names">Štěpánka &amp; Tomáš</div>
                     <div class="letter-date">8. KVĚTNA 2027</div>
                 </div>
-                <div class="heart-seal">♡</div>
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="envelope-seal">
+                    <span>♡</span>
+                </div>
             </div>
             <p class="click-hint">Klikněte pro otevření</p>
         </div>
