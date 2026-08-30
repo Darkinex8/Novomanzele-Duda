@@ -193,7 +193,7 @@
                         </div>
                         <div class="dress-accessories">
                             <div class="dress-accessory">
-                                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 19v20"></path><path d="M23 20c-4-1-10-4-13-7l-4 4c3 5 9 9 16 9"></path><path d="M25 20c4-1 10-4 13-7l4 4c-3 5-9 9-16 9"></path><path d="M19 39h10"></path></svg>
+                                <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M15 15l9 5 9-5 5 6-5 6-9-5-9 5-5-6 5-6z"></path><path d="M24 21v17"></path><path d="M19 38h10"></path><path d="M21 18h6"></path></svg>
                                 <span>Motýlek</span>
                             </div>
                             <div class="dress-accessory">
@@ -217,7 +217,9 @@
                 <h2 class="section-heading">PROSÍME O VYPLNĚNÍ DOTAZNÍKU</h2>
                 <p class="rsvp-sub">Prosíme, vyplňte za sebe a všechny, kteří s vámi dorazí.</p>
 
-                <form id="wedding-rsvp-form" action="https://formspree.io/f/mojeformularid" method="POST" class="rsvp-form">
+                <form id="wedding-rsvp-form" action="" method="POST" target="rsvp-submit-frame" class="rsvp-form">
+                    <input type="hidden" name="rsvp_payload" id="rsvp-payload">
+                    <iframe name="rsvp-submit-frame" id="rsvp-submit-frame" class="rsvp-submit-frame" title="Odeslání dotazníku"></iframe>
                     
                     <div class="form-step">
                         <label class="step-title">SEZNAM HOSTŮ <span class="step-desc">Přidejte všechny, kteří s vámi dorazí</span></label>
@@ -240,17 +242,17 @@
                                     <input type="text" name="guest_diet_1" placeholder="např. bez lepku">
                                 </div>
                                 <div>
-                                    <label class="mini-label">Přespání (Ubytování / stan)</label>
+                                    <label class="mini-label">Ubytování</label>
                                     <select name="guest_sleep_1">
                                         <option value="Ano">Ano</option>
                                         <option value="Ne">Ne</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="mini-label">Vlastní odvoz</label>
+                                    <label class="mini-label">Odvoz</label>
                                     <select name="guest_transport_1">
-                                        <option value="Ano">Ano</option>
-                                        <option value="Ne">Ne</option>
+                                        <option value="Mám vlastní">Mám vlastní</option>
+                                        <option value="Potřebuji zajistit">Potřebuji zajistit</option>
                                     </select>
                                 </div>
                             </div>
@@ -270,6 +272,22 @@
 
             </div>
         </section>
+
+        <!-- 9. FOOTER & QR KÓD -->
+        <footer class="site-footer">
+            <div class="container footer-content">
+                <div class="footer-text-side">
+                    <h2>TĚŠÍME SE NA VÁS!</h2>
+                    <p class="footer-names">Štěpánka & Tomáš</p>
+                </div>
+                <div class="qr-code-box">
+                    <p class="qr-label">NASKENUJE MĚ</p>
+                    <div class="qr-placeholder">
+                        <!-- Nahraďte vlastním QR kódem podle potřeby -->
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://vasestranka.cz" alt="QR Kód">
+                    </div>
+                    <p class="qr-sub">Otevřete si naši svatební stránku</p>
+                </div>
             </div>
         </footer>
 

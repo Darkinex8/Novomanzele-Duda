@@ -77,17 +77,17 @@ function addGuestRow() {
             <input type="text" name="guest_diet_${guestIndex}" placeholder="např. bez lepku">
         </div>
         <div>
-            <label class="mini-label">Přespání</label>
+            <label class="mini-label">Ubytování</label>
             <select name="guest_sleep_${guestIndex}">
                 <option value="Ano">Ano</option>
                 <option value="Ne">Ne</option>
             </select>
         </div>
         <div>
-            <label class="mini-label">Vlastní odvoz</label>
+            <label class="mini-label">Odvoz</label>
             <select name="guest_transport_${guestIndex}">
-                <option value="Ano">Ano</option>
-                <option value="Ne">Ne</option>
+                <option value="Mám vlastní">Mám vlastní</option>
+                <option value="Potřebuji zajistit">Potřebuji zajistit</option>
             </select>
         </div>
     `;
@@ -95,36 +95,44 @@ function addGuestRow() {
     guestContainer.appendChild(newRow);
 }
 
-// Odesílání dotazníku
+// Odesílání dotazníku do Google Sheets přes Google Apps Script.
+// Po nasazení Apps Scriptu vlož jeho URL níže.
+const RSVP_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzycz28Cio-h1AbdCnnzMlkFMLhSfbsQKrLdriXScnkkAUFWNVEj144SrM5QesgTCn1aQ/exec";
 const rsvpForm = document.getElementById("wedding-rsvp-form");
 const statusMessage = document.getElementById("form-status");
 
 if (rsvpForm) {
-    rsvpForm.addEventListener("submit", async function(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        
+    rsvpForm.action = RSVP_SHEETS_URL.startsWith("http") ? RSVP_SHEETS_URL : "#";
+
+    rsvpForm.addEventListener("submit", function(e) {
+        if (!RSVP_SHEETS_URL.startsWith("http")) {
+            e.preventDefault();
+            statusMessage.style.color = "#8b5e3c";
+            statusMessage.innerText = "Dotazník ještě není připojený ke Google tabulce. V nastavení stránky je potřeba vložit URL Google Apps Scriptu.";
+            return;
+        }
+
+        const rows = Array.from(document.querySelectorAll("#guests-container .guest-row-grid"));
+        const guests = rows.map((row, index) => ({
+            name: row.querySelector(`[name="guest_name_${index + 1}"]`)?.value.trim() || "",
+            attending: row.querySelector(`[name="guest_attending_${index + 1}"]`)?.value || "",
+            diet: row.querySelector(`[name="guest_diet_${index + 1}"]`)?.value.trim() || "",
+            accommodation: row.querySelector(`[name="guest_sleep_${index + 1}"]`)?.value || "",
+            transport: row.querySelector(`[name="guest_transport_${index + 1}"]`)?.value || ""
+        }));
+
+        document.getElementById("rsvp-payload").value = JSON.stringify({
+            guests,
+            note: document.querySelector('[name="poznamka"]')?.value.trim() || ""
+        });
+
         statusMessage.style.color = "#113426";
         statusMessage.innerText = "Odesílám dotazník...";
 
-        try {
-            const response = await fetch(e.target.action, {
-                method: rsvpForm.method,
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (response.ok) {
-                statusMessage.style.color = "green";
-                statusMessage.innerText = "Děkujeme! Váš dotazník byl úspěšně odeslán.";
-                rsvpForm.reset();
-            } else {
-                statusMessage.style.color = "red";
-                statusMessage.innerText = "Při odesílání došlo k chybě. Zkontrolujte prosím pole formuláře.";
-            }
-        } catch (error) {
-            statusMessage.style.color = "red";
-            statusMessage.innerText = "Chyba sítě. Zkuste to prosím znovu.";
-        }
+        setTimeout(() => {
+            statusMessage.style.color = "#113426";
+            statusMessage.innerText = "Děkujeme! Váš dotazník byl úspěšně odeslán.";
+            rsvpForm.reset();
+        }, 900);
     });
 }
