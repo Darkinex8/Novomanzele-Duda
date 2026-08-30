@@ -27,25 +27,31 @@ body {
     overflow-x: hidden;
 }
 
-/* 1. ÚVODNÍ POZVÁNKA */
+/* 1. SVATEBNÍ POZVÁNKA – čistý vstup na stránku */
 .invitation-overlay {
     position: fixed;
     inset: 0;
-    z-index: 9999;
-    display: grid;
-    place-items: center;
-    padding: 28px;
-    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
     background:
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,.98) 0%, rgba(248,242,232,.98) 52%, rgba(238,229,214,.98) 100%);
-    transition: opacity .85s cubic-bezier(.22,.61,.36,1), visibility .85s ease;
+        radial-gradient(circle at 50% 35%, rgba(255,255,255,.82), transparent 42%),
+        linear-gradient(135deg, #eee5d8 0%, #f7f2ea 50%, #e9dfd0 100%);
+    z-index: 9999;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .9s ease, visibility .9s ease;
 }
 
 .invitation-overlay::before,
 .invitation-overlay::after {
     content: '';
     position: absolute;
-    border: 1px solid rgba(191,161,95,.22);
+    border: 1px solid rgba(191,161,95,.24);
     border-radius: 50%;
     pointer-events: none;
 }
@@ -58,13 +64,13 @@ body {
 }
 
 .invitation-overlay::after {
-    width: 92vw;
-    height: 92vw;
-    max-width: 1200px;
-    max-height: 1200px;
+    width: 88vw;
+    height: 88vw;
+    max-width: 1120px;
+    max-height: 1120px;
 }
 
-.invitation-overlay.opening {
+.invitation-overlay.opened {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -73,179 +79,114 @@ body {
 .invitation-card {
     position: relative;
     z-index: 2;
-    width: min(620px, 82vw);
-    min-height: min(720px, 76vh);
-    padding: 12px;
-    border: 1px solid var(--color-gold);
+    width: min(58vw, 680px);
+    min-height: min(70vh, 650px);
+    padding: clamp(45px, 7vw, 85px) clamp(35px, 6vw, 75px);
+    border: 1px solid rgba(191,161,95,.75);
+    outline: 1px solid rgba(191,161,95,.28);
+    outline-offset: -10px;
     border-radius: 3px;
-    background: linear-gradient(145deg, #1b4938, #103326);
-    box-shadow: 0 30px 80px rgba(17,52,38,.24), 0 8px 24px rgba(0,0,0,.12);
-    cursor: pointer;
-    color: inherit;
-    transform: translateY(0) scale(1);
-    transition: transform .55s cubic-bezier(.22,.61,.36,1), box-shadow .55s ease;
-    animation: invitationAppear .9s ease both;
-}
-
-.invitation-card:hover {
-    transform: translateY(-8px) scale(1.012);
-    box-shadow: 0 38px 90px rgba(17,52,38,.30), 0 12px 28px rgba(0,0,0,.14);
-}
-
-.invitation-card:focus-visible {
-    outline: 2px solid var(--color-gold);
-    outline-offset: 6px;
-}
-
-.invitation-inner {
-    position: relative;
-    min-height: calc(min(720px, 76vh) - 24px);
+    background: #fbf8f3;
+    color: var(--color-dark-green);
+    box-shadow: 0 28px 70px rgba(37,48,42,.18), 0 8px 20px rgba(37,48,42,.08);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 60px 40px;
-    overflow: hidden;
-    background: #fcf9f5;
-    border: 1px solid rgba(191,161,95,.65);
+    text-align: center;
+    cursor: pointer;
+    appearance: none;
+    font: inherit;
+    transform: translateY(0) scale(1);
+    transition: transform .35s ease, box-shadow .35s ease;
 }
 
-.invitation-inner::before,
-.invitation-inner::after {
+.invitation-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    box-shadow: 0 36px 85px rgba(37,48,42,.22), 0 10px 25px rgba(37,48,42,.1);
+}
+
+.invitation-card:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 5px;
+}
+
+.invitation-card::before,
+.invitation-card::after {
     content: '';
     position: absolute;
-    width: 150px;
-    height: 260px;
-    border: 1px solid rgba(191,161,95,.42);
-    border-radius: 70% 30% 70% 30%;
-    pointer-events: none;
+    width: 34px;
+    height: 34px;
+    border-color: var(--color-gold);
+    border-style: solid;
 }
 
-.invitation-inner::before {
-    left: -92px;
-    bottom: -90px;
-    transform: rotate(28deg);
+.invitation-card::before {
+    top: 24px;
+    left: 24px;
+    border-width: 1px 0 0 1px;
 }
 
-.invitation-inner::after {
-    right: -92px;
-    top: -90px;
-    transform: rotate(208deg);
+.invitation-card::after {
+    right: 24px;
+    bottom: 24px;
+    border-width: 0 1px 1px 0;
 }
 
-.invitation-small {
+.invitation-kicker {
     font-family: var(--font-body);
-    font-size: .72rem;
-    font-weight: 600;
+    font-size: clamp(.65rem, 1vw, .8rem);
     letter-spacing: 4px;
     color: var(--color-gold);
-}
-
-.invitation-rule {
-    width: 64px;
-    height: 1px;
-    margin: 24px 0 34px;
-    background: var(--color-gold);
+    margin-bottom: 28px;
 }
 
 .invitation-names {
     font-family: var(--font-heading);
-    font-size: clamp(3.2rem, 6vw, 5.2rem);
-    line-height: .98;
-    color: var(--color-dark-green);
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    line-height: 1.05;
     font-weight: 600;
 }
 
 .invitation-names em {
-    display: block;
-    margin: 14px 0;
-    font-size: .48em;
-    font-weight: 400;
     color: var(--color-gold);
+    font-weight: 400;
+}
+
+.invitation-rule {
+    width: 90px;
+    height: 1px;
+    background: var(--color-gold);
+    margin: 28px 0 22px;
 }
 
 .invitation-date {
-    margin-top: 42px;
-    font-family: var(--font-body);
-    font-size: .9rem;
-    letter-spacing: 4px;
-    color: var(--color-dark-green);
+    font-size: clamp(.75rem, 1.1vw, .95rem);
+    letter-spacing: 3px;
+    font-weight: 500;
 }
 
 .invitation-place {
-    margin-top: 12px;
-    font-family: var(--font-body);
-    font-size: .68rem;
-    letter-spacing: 3px;
-    color: var(--color-text-muted);
-}
-
-.invitation-open-hint {
-    margin-top: 64px;
+    margin-top: 9px;
     font-family: var(--font-heading);
-    font-style: italic;
-    font-size: 1.25rem;
-    color: var(--color-dark-green);
-    transition: color .25s ease, transform .25s ease;
-}
-
-.invitation-card:hover .invitation-open-hint {
-    color: var(--color-gold);
-    transform: translateY(-2px);
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    color: var(--color-medium-green);
 }
 
 .invitation-ornament {
-    position: absolute;
-    z-index: 3;
-    width: 80px;
-    height: 120px;
-    border: 1px solid rgba(191,161,95,.38);
-    border-radius: 80% 20% 80% 20%;
-    pointer-events: none;
+    color: var(--color-gold);
+    font-size: 1rem;
 }
 
-.ornament-left {
-    left: 18px;
-    bottom: 18px;
-    transform: rotate(-28deg);
-}
+.invitation-ornament.top { margin-bottom: 20px; }
+.invitation-ornament.bottom { margin-top: 35px; }
 
-.ornament-right {
-    right: 18px;
-    top: 18px;
-    transform: rotate(152deg);
-}
-
-@keyframes invitationAppear {
-    from { opacity: 0; transform: translateY(22px) scale(.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.main-content {
-    opacity: 0;
-    transform: scale(1.025);
-    transform-origin: top center;
-    transition: opacity .9s ease .15s, transform 1s cubic-bezier(.22,.61,.36,1) .05s;
-}
-
-.main-content.is-visible {
-    opacity: 1;
-    transform: scale(1);
-}
-
-@media (max-width: 768px) {
-    .invitation-overlay { padding: 18px; }
-    .invitation-card {
-        width: min(92vw, 500px);
-        min-height: min(640px, 78vh);
-    }
-    .invitation-inner {
-        min-height: calc(min(640px, 78vh) - 24px);
-        padding: 45px 22px;
-    }
-    .invitation-names { font-size: clamp(2.7rem, 12vw, 4rem); }
-    .invitation-date { letter-spacing: 2.5px; }
-    .invitation-open-hint { margin-top: 48px; }
+.invitation-hint {
+    margin-top: 38px;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--color-sage);
 }
 
 /* CONTAINER & GENERAL SECTIONS */
@@ -870,3 +811,28 @@ input:focus, select:focus, textarea:focus {
 
 /* Silnější typografická hierarchie pro dresscode */
 .dresscode-card strong { color: var(--color-dark-green); font-weight: 600; }
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+    .envelope-wrapper:hover .letter,
+}
+
+
+@media (max-width: 768px) {
+    .invitation-overlay { padding: 18px; }
+    .invitation-card {
+        width: min(88vw, 520px);
+        min-height: 68vh;
+        padding: 45px 28px;
+    }
+    .invitation-names { font-size: clamp(2.35rem, 11vw, 3.5rem); }
+    .invitation-kicker { letter-spacing: 3px; }
+}
+
+@media (max-width: 480px) {
+    .invitation-card { min-height: 72vh; }
+    .invitation-card::before { top: 18px; left: 18px; }
+    .invitation-card::after { right: 18px; bottom: 18px; }
+}

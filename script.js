@@ -1,26 +1,20 @@
-// Otevření svatební pozvánky s jemným přechodem na hlavní stránku.
-function openInvitation() {
-    const overlay = document.getElementById('invitation-overlay');
-    const main = document.querySelector('.main-content');
+// Otevření svatební pozvánky s plynulým přechodem na stránku.
+function openEnvelope() {
+    const overlay = document.getElementById('envelope-overlay');
+    const card = document.querySelector('.invitation-card');
 
-    if (!overlay) return;
+    if (!overlay || overlay.classList.contains('opened')) return;
 
-    overlay.classList.add('opening');
-    if (main) main.classList.add('is-visible');
-
-    // Overlay z DOM odstraníme až po dokončení animace.
-    setTimeout(() => {
-        overlay.remove();
-    }, 1000);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const main = document.querySelector('.main-content');
-    if (main) {
-        // Hlavní obsah se zobrazí až po otevření pozvánky.
-        main.classList.remove('is-visible');
+    if (card) {
+        card.style.transform = 'translateY(-18px) scale(1.035)';
+        card.style.opacity = '0';
+        card.style.transition = 'transform .65s ease, opacity .65s ease';
     }
-});
+
+    setTimeout(() => {
+        overlay.classList.add('opened');
+    }, 420);
+}
 
 // Odpočet do 8. května 2027 11:00
 const targetDate = new Date("May 8, 2027 11:00:00").getTime();

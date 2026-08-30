@@ -12,19 +12,17 @@
 </head>
 <body>
 
-    <!-- 1. ÚVODNÍ POZVÁNKA -->
-    <div id="invitation-overlay" class="invitation-overlay">
-        <button class="invitation-card" type="button" onclick="openInvitation()" aria-label="Otevřít svatební pozvánku">
-            <span class="invitation-ornament ornament-left" aria-hidden="true"></span>
-            <span class="invitation-inner">
-                <span class="invitation-small">SVATEBNÍ POZVÁNKA</span>
-                <span class="invitation-rule" aria-hidden="true"></span>
-                <span class="invitation-names">Štěpánka <em>&amp;</em> Tomáš</span>
-                <span class="invitation-date">8. KVĚTNA 2027</span>
-                <span class="invitation-place">MLÝN 1774 · DZBEL</span>
-                <span class="invitation-open-hint">Klikněte pro otevření</span>
-            </span>
-            <span class="invitation-ornament ornament-right" aria-hidden="true"></span>
+    <!-- 1. SVATEBNÍ POZVÁNKA -->
+    <div id="envelope-overlay" class="invitation-overlay">
+        <button class="invitation-card" type="button" onclick="openEnvelope()" aria-label="Otevřít svatební stránku">
+            <span class="invitation-ornament top">✦</span>
+            <span class="invitation-kicker">SVATEBNÍ OZNÁMENÍ</span>
+            <span class="invitation-names">Štěpánka <em>&amp;</em> Tomáš</span>
+            <span class="invitation-rule"></span>
+            <span class="invitation-date">8. KVĚTNA 2027</span>
+            <span class="invitation-place">MLÝN 1774 · DZBEL</span>
+            <span class="invitation-ornament bottom">✦</span>
+            <span class="invitation-hint">Klikněte pro vstup</span>
         </button>
     </div>
 
